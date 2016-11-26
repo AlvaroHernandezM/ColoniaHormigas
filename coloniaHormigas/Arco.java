@@ -5,7 +5,7 @@ public class Arco {
 	public int adyacencia;
 	
 	double tiempo;
-	
+	//tiempo de costo
 	public Arco(int adyacencia, double tiempo){
 		this.adyacencia = adyacencia;
 		this.tiempo = tiempo;

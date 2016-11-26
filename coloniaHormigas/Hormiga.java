@@ -1,5 +1,6 @@
  package coloniaHormigas;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Hormiga extends Thread{
@@ -23,14 +24,47 @@ public class Hormiga extends Thread{
 		this.buscando = buscando;
 	}
 	
+	private ArrayList<String> probabilidadCaminos(ArrayList<String> posiblesCaminos, int numFeromonas){
+		double probabilidadMax = 0;
+		ArrayList<String> auxCaminos = new ArrayList<>(); 
+		for (int i = 0; i < posiblesCaminos.size(); i++) {
+			//System.out.println("probabilidad: "+Double.parseDouble(posiblesCaminos.get(i).split("-",2)[1])/numFeromonas);
+			if(Double.parseDouble(posiblesCaminos.get(i).split("-",2)[1])/numFeromonas >= probabilidadMax){
+				probabilidadMax = Double.parseDouble(posiblesCaminos.get(i).split("-",2)[1])/numFeromonas;
+				for (int j = 0; j < auxCaminos.size(); j++) {
+					if(Double.parseDouble(posiblesCaminos.get(i).split("-",2)[1]) < probabilidadMax){
+						auxCaminos.remove(j);
+					}
+				}
+				auxCaminos.add(posiblesCaminos.get(i));
+			}
+		}
+		return auxCaminos;
+	}
+	
 	public String seleccionarCamino(ArrayList<String> posiblesCaminos){
-		int indexCamino = (int)(Math.random() * posiblesCaminos.size());
-		return posiblesCaminos.get(indexCamino);
+		int numFeromonas = 0;
+		for (int i = 0; i < posiblesCaminos.size(); i++) {
+			numFeromonas += Integer.parseInt(posiblesCaminos.get(i).split("-",2)[1]);
+		}	
+		
+		ArrayList<String> auxCaminos = this.probabilidadCaminos(posiblesCaminos, numFeromonas);
+		
+		if(auxCaminos.size()==1){
+			return auxCaminos.get(0).split("-", 2)[0]; //cuando solo encuentra a uno con la mayor porbabilidad //System.out.println("solo encontro uno");
+		} else if(auxCaminos.size()>1){ // cuando es más de uno que tienen una probabilidad igual y mayor 			//aplciar probabilidad de las feromonas
+			//System.out.println("son: "+auxCaminos.size()+", por loque se hace al azar");
+			return auxCaminos.get((int)(Math.random() * auxCaminos.size())).split("-",2)[0];
+		} else {
+			System.err.println("No debio pasar");
+			return "";
+		}
 	}
 	
 	public String seleccionarRetorno(ArrayList<String> posiblesCaminos){
 		int indexCamino = (int)(Math.random() * posiblesCaminos.size());
-		return posiblesCaminos.get(indexCamino);
+		System.out.println("FEROMOAS :: "+posiblesCaminos.get(indexCamino).split("-", 2)[1]);
+		return posiblesCaminos.get(indexCamino).split("-", 2)[0];
 //		Vertice camino = this.grafo.getVertice(posiblesCaminos.get(indexCamino));
 //		System.out.println("Feromona en " + camino.getNombre()+ ": " + camino.getCantidadFeromona());
 //		if (camino.getCantidadFeromona() == 0) {

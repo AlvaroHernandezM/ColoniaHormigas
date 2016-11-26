@@ -12,7 +12,7 @@ public class Grafo {
 			this.vertices = vertices;
 			this.arcos = arcos;
 		}else{
-			System.out.println("Existe un proble con las matrices dadas");
+			System.out.println("Existe un problema con las matrices dadas");
 			this.vertices = null;
 			this.arcos = null;
 		}
@@ -31,7 +31,7 @@ public class Grafo {
 		
 		for (int i = 0; i < arcos[0].length; i++) {
 			if (arcos[indexPosicion][i].getAdyacencia() == 1) {
-				caminos.add(vertices[i].getNombre());
+				caminos.add(vertices[i].getNombre()+"-"+vertices[i].getCantidadFeromona());
 			}
 		}
 		

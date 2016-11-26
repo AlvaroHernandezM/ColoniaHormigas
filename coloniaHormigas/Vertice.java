@@ -8,7 +8,7 @@ public class Vertice {
 	
 	public Vertice(String nombre){
 		this.nombre = nombre;
-		this.cantidadFeromona = 0;
+		this.cantidadFeromona = 1;
 	}
 	
 	
