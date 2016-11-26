@@ -31,7 +31,7 @@ public class Grafo {
 		
 		for (int i = 0; i < arcos[0].length; i++) {
 			if (arcos[indexPosicion][i].getAdyacencia() == 1) {
-				caminos.add(vertices[i].getNombre()+"-"+vertices[i].getCantidadFeromona());
+				caminos.add(vertices[i].getNombre());
 			}
 		}
 		
