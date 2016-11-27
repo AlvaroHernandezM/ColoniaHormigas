@@ -1,14 +1,20 @@
 package coloniaHormigas;
 
-
-public class Vertice {
+public class Vertice extends Thread{
 	
-	public String nombre;
-	public int cantidadFeromona;
+	private String nombre;
+	private int cantidadFeromona;
+	private java.awt.Point posicion;
 	
 	public Vertice(String nombre){
 		this.nombre = nombre;
 		this.cantidadFeromona = 1;
+	}
+	
+	public Vertice(String nombre, java.awt.Point posicion){
+		this.nombre = nombre;
+		this.cantidadFeromona = 1;
+		this.posicion = posicion; 
 	}
 	
 	
@@ -43,6 +49,28 @@ public class Vertice {
 	public void setCantidadFeromona(int cantidadFeromona) {
 		this.cantidadFeromona = cantidadFeromona;
 	}
+
+	public java.awt.Point getPosicion() {
+		return posicion;
+	}
+
+	public void setPosicion(java.awt.Point posicion) {
+		this.posicion = posicion;
+	}
 	
+	@Override
+	public void run() {
+		while(true){
+			if(this.cantidadFeromona>1){
+				this.cantidadFeromona--;
+			}
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 	
 }

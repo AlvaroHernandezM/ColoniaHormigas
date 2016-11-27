@@ -2,8 +2,7 @@ package coloniaHormigas;
 
 public class Arco {
 	
-	public int adyacencia;
-	
+	public int adyacencia;	
 	double tiempo;
 	//tiempo de costo
 	public Arco(int adyacencia, double tiempo){
