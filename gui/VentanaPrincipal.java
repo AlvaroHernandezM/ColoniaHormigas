@@ -44,7 +44,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener, MouseLis
 	JMenuItem menuBuscar;
 	JPanelFondo pnlFondo; 
 	
-	JLabel lblHormigas;
+	JLabel lblHormigas,lblTxt1,lblTxt2;
 	
 	public VentanaPrincipal(){
 		this.setTitle("COLONIA DE HORMIGAS - INV. OPERACIONES 2016-02");
@@ -80,9 +80,15 @@ public class VentanaPrincipal extends JFrame implements ActionListener, MouseLis
 		barraMenu.add(menuColonia);
 		
 		this.setJMenuBar(barraMenu);
+		this.lblTxt1 = new JLabel("Han vuelto:");
+		this.lblTxt1.setBounds(0, 0, 100, 30);
 		this.lblHormigas = new JLabel("0");
-		this.lblHormigas.setBounds(0, 0, 100, 30);
+		this.lblHormigas.setBounds(105, 0, 100, 30);
+		this.lblTxt2 = new JLabel("hormigas");
+		this.lblTxt2.setBounds(230, 0, 100, 30);
+		this.pnlFondo.add(lblTxt1);
 		this.pnlFondo.add(lblHormigas);
+		this.pnlFondo.add(lblTxt2);
 	}
 	
 	public void agregarNodo(int x, int y){
@@ -90,7 +96,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener, MouseLis
 			String nombreNodo = JOptionPane.showInputDialog("Nombre del nodo");
 			if(nombreNodo!=null && nombreNodo.length()>0){
 				Vertice vertice = new Vertice(nombreNodo, new Point(x,y));
-				vertice.start();
+				//vertice.start();
 				this.grafo.agregarVertice(vertice);
 				//Graphics grafico = this.getGraphics();
 				Graphics2D grafico = (Graphics2D) this.getGraphics();

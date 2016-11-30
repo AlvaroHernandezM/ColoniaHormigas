@@ -6,6 +6,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
 public class Hormiga extends Thread{
 	
@@ -32,24 +34,86 @@ public class Hormiga extends Thread{
 		this.buscando = buscando;
 	}
 	
-	private ArrayList<String> probabilidadCaminos(ArrayList<String> posiblesCaminos, int numFeromonas){
-		double probabilidadMax = 0;
-		ArrayList<String> auxCaminos = new ArrayList<>(); 
-		
-		for (int i = 0; i < posiblesCaminos.size(); i++) {
-			System.out.println("probabilidad: "+(double)this.grafo.getVertice(posiblesCaminos.get(i)).getCantidadFeromona()/numFeromonas );
-			
-			if((double)this.grafo.getVertice(posiblesCaminos.get(i)).getCantidadFeromona()/numFeromonas >= probabilidadMax){
-				probabilidadMax = (double)this.grafo.getVertice(posiblesCaminos.get(i)).getCantidadFeromona()/numFeromonas;
-				for (int j = 0; j < auxCaminos.size(); j++) {
-					if((double)this.grafo.getVertice(auxCaminos.get(j)).getCantidadFeromona()/numFeromonas < probabilidadMax){
-						auxCaminos.remove(j);
-					}
-				}
-				auxCaminos.add(posiblesCaminos.get(i));
+	private int cantidadVeces(int cantidadFeromonas, ArrayList<Vertice> vertices){
+		int numVece=0;
+		for (int i = 0; i < vertices.size(); i++) {
+			if(vertices.get(i).getCantidadFeromona()==cantidadFeromonas) numVece++;
+		}
+		return numVece;
+	}
+	
+	private String rangosIguales(ArrayList<Vertice> vertices, int numFeromonas, double random){
+		double delta= (double)vertices.get(0).getCantidadFeromona()/numFeromonas; double min=0;
+		for (int i = 0; i < vertices.size(); i++) {
+			double max = ((double)vertices.get(i).getCantidadFeromona()/numFeromonas)*(i+1);
+			if(i==vertices.size()-1){ //el ultimo
+				if(random>=min&&random<=max) return vertices.get(i).getNombre();
+				else System.out.println("Caso imposible, random: "+random);
+			} else {
+				if(random>=min&&random<max)	return vertices.get(i).getNombre();		
+				else min+=delta;
 			}
 		}
-		return auxCaminos;
+		return null;
+	}
+	
+	private String probabilidadCaminos(ArrayList<String> posiblesCaminos, int numFeromonas){
+		//double probabilidadAcumulada = 0;
+		ArrayList<Vertice> vertices = new ArrayList<Vertice>();
+		for (int i = 0; i < posiblesCaminos.size(); i++) {
+			vertices.add(this.grafo.getVertice(posiblesCaminos.get(i)));
+		}
+		Collections.sort(vertices);
+		//generamos el numero aleatorio
+		double random = new Random().nextDouble();
+		//en caso de que todos tenga lamisma probabilidad se debe generar rangos acumulados sencillo
+		if(this.cantidadVeces(vertices.get(0).getCantidadFeromona(), vertices)==vertices.size()){
+			return this.rangosIguales(vertices, numFeromonas, random);
+		} else {
+			double min=0;
+			for (int j = 0; j < vertices.size(); j++) {
+				double max = ((double)vertices.get(j).getCantidadFeromona()/numFeromonas);
+				int cantidadVeces = this.cantidadVeces(vertices.get(j).getCantidadFeromona(), vertices);
+				if(cantidadVeces>1){
+					if(j+cantidadVeces == vertices.size()){
+						if(random>=min&&random<1)	{
+							return vertices.get((int)(Math.random()*((j+cantidadVeces-1)-j)+j)).getNombre();
+						}
+						else {
+							System.err.println("No debe pasar "+random);
+						}
+					} else {
+						if(random>=min&&random<=max){
+							return vertices.get((int)(Math.random()*((j+cantidadVeces-1)-j)+j)).getNombre();
+						} else {
+							j+=(cantidadVeces-1);
+							min=max;
+						}						
+					}
+				} else {
+					if(j == vertices.size()-1){
+						if(random>=min&&random<1)	return vertices.get(j).getNombre();		
+						else {
+							System.err.println("No debe pasar "+random);
+						}
+					} else {
+						if(random>=min&&random<max)	return vertices.get(j).getNombre();		
+						else {
+							min=max;
+						}						
+					}
+				}				
+			}
+		}
+		System.out.println("no debe pasar");
+		return null;
+//		for (int i = 0; i < posiblesCaminos.size(); i++) {
+//			auxCaminos.add(String.valueOf((double)this.grafo.getVertice(posiblesCaminos.get(i)).getCantidadFeromona()/numFeromonas));
+//			System.out.println("probabilidad: "+(double)this.grafo.getVertice(posiblesCaminos.get(i)).getCantidadFeromona()/numFeromonas );
+//			
+//			
+//		}
+//		return posiblesCaminos;
 	}
 	
 	public String seleccionarCamino(ArrayList<String> posiblesCaminos){
@@ -57,18 +121,17 @@ public class Hormiga extends Thread{
 		for (int i = 0; i < posiblesCaminos.size(); i++) {
 			numFeromonas += this.grafo.getVertice(posiblesCaminos.get(i)).getCantidadFeromona();
 		}	
+		return this.probabilidadCaminos(posiblesCaminos, numFeromonas);
 		
-		ArrayList<String> auxCaminos = this.probabilidadCaminos(posiblesCaminos, numFeromonas);
-		
-		if(auxCaminos.size()==1){
-			return auxCaminos.get(0); //cuando solo encuentra a uno con la mayor porbabilidad //System.out.println("solo encontro uno");
-		} else if(auxCaminos.size()>1){ // cuando es más de uno que tienen una probabilidad igual y mayor 			//aplciar probabilidad de las feromonas
-			//System.out.println("son: "+auxCaminos.size()+", por loque se hace al azar");
-			return auxCaminos.get((int)(Math.random() * auxCaminos.size()));
-		} else {
-			System.err.println("No debio pasar");
-			return "";
-		}
+//		if(auxCaminos.size()==1){
+//			return auxCaminos.get(0); //cuando solo encuentra a uno con la mayor porbabilidad //System.out.println("solo encontro uno");
+//		} else if(auxCaminos.size()>1){ // cuando es más de uno que tienen una probabilidad igual y mayor 			//aplciar probabilidad de las feromonas
+//			//System.out.println("son: "+auxCaminos.size()+", por loque se hace al azar");
+//			return auxCaminos.get((int)(Math.random() * auxCaminos.size()));
+//		} else {
+//			System.err.println("No debio pasar");
+//			return "";
+//		}
 	}
 	
 	public String seleccionarRetorno(ArrayList<String> posiblesCaminos){

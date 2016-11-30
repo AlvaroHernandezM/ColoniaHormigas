@@ -69,10 +69,10 @@ public class Test {
 		listaArcos.add(I);
 		
 		
-		//Grafo grafo = new Grafo(listaVertices, listaArcos);
-		//Colonia colonia = new Colonia(grafo, null);
-		//colonia.buscarCamino();
-		
+		Grafo grafo = new Grafo(listaVertices, listaArcos);
+		Colonia colonia = new Colonia(grafo, null,0);
+		colonia.buscarCamino();
+//		
 		VentanaPrincipal ventana = new VentanaPrincipal();
 		ventana.setVisible(true);
 		
