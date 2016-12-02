@@ -184,6 +184,7 @@ public class Hormiga extends Thread{
 		if (this.posicion.getNombre().equals(Constantes.CASA)) {
 			this.trabajando = false;
 		}
+		
 	}
 	
 	public int calcularY(Vertice origen, Vertice destino, int x){
@@ -212,10 +213,12 @@ public class Hormiga extends Thread{
 		
 		if (posicionOrigen.x < posicionDestino.x) {//camina de izquierda a derecha
 			int distancia = posicionDestino.x - posicionOrigen.x;
-			double intervalo = ((double)distancia / (double)arco.getTiempo() );//los convertimos a double para que haga la division
+			//double intervalo = ((double)distancia / (double)arco.getTiempo() );//los convertimos a double para que haga la division
+			double intervalo = 1/ (double)arco.getTiempo() ;//los convertimos a double para que haga la division
 			if (intervalo < 1) {//el intervalo es cada cuanto va a cambiar de posición. depente de la distancia y tiempo
 				intervalo = 1;
 			}
+			//System.out.println("i -d " + intervalo);
 			for (int i = posicionOrigen.x; i < posicionDestino.x; i+= intervalo) {
 				int x = i;
 				int y = this.calcularY(this.posicion, destino, x);//calculamos la posición en y de acuerdo a la ecuación de la recta 
@@ -226,14 +229,16 @@ public class Hormiga extends Thread{
 				graficoVentana.fillOval(x, y, 10, 10);//dibujamos la nueva posicion
 				this.dibujarFeromona();
 				
-				Thread.sleep(400);
+				Thread.sleep((int)(arco.getTiempo()));
 			}
 		}else{//caminamos de derecha a izquierda
 			int distancia = posicionOrigen.x - posicionDestino.x;
-			double intervalo = ((double)distancia / (double)arco.getTiempo() );//los convertimos a double para que haga la division
+			double intervalo = 1 /(double)arco.getTiempo();//los convertimos a double para que haga la division
 			if (intervalo < 1) {
 				intervalo = 1;
 			}
+			//System.out.println(intervalo);
+			
 			for (int i = posicionOrigen.x; i > posicionDestino.x; i-= intervalo) {
 				int x = i;
 				int y = this.calcularY(this.posicion, destino, x);
@@ -244,7 +249,7 @@ public class Hormiga extends Thread{
 				graficoVentana.fillOval(x, y, 10, 10);
 				this.dibujarFeromona();
 				
-				Thread.sleep(400);
+				Thread.sleep((int)(arco.getTiempo()));
 			}			
 		}
 		

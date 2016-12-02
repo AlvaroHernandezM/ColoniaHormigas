@@ -96,7 +96,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener, MouseLis
 			String nombreNodo = JOptionPane.showInputDialog("Nombre del nodo");
 			if(nombreNodo!=null && nombreNodo.length()>0){
 				Vertice vertice = new Vertice(nombreNodo, new Point(x,y));
-				//vertice.start();
+				vertice.start();
 				this.grafo.agregarVertice(vertice);
 				//Graphics grafico = this.getGraphics();
 				Graphics2D grafico = (Graphics2D) this.getGraphics();

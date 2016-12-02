@@ -1,6 +1,6 @@
 package coloniaHormigas;
 
-public class Vertice implements Comparable<Vertice>{
+public class Vertice extends Thread implements Comparable<Vertice> {
 	
 	private String nombre;
 	private int cantidadFeromona;
@@ -58,20 +58,20 @@ public class Vertice implements Comparable<Vertice>{
 		this.posicion = posicion;
 	}
 	
-//	@Override
-//	public void run() {
-//		while(true){
-//			if(this.cantidadFeromona>1){
-//				this.cantidadFeromona--;
-//			}
-//			try {
-//				Thread.sleep(3000);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-//	}
+	@Override
+	public void run() {
+		while(true){
+			if(this.cantidadFeromona>1){
+				this.cantidadFeromona--;
+			}
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 
 	@Override
 	public int compareTo(Vertice v2) {

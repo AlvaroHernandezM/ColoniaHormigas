@@ -76,18 +76,18 @@ public class Test {
 		VentanaPrincipal ventana = new VentanaPrincipal();
 		ventana.setVisible(true);
 		
-		Thread hilo = new Thread(new Runnable() {//limpia la pantalla cada 5 segundos
-			public void run() {
-				ventana.repaint();
-				try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}); 
-		hilo.start();
+//		Thread hilo = new Thread(new Runnable() {//limpia la pantalla cada 5 segundos
+//			public void run() {
+//				ventana.repaint();
+//				try {
+//					Thread.sleep(5000);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//			}
+//		}); 
+//		hilo.start();
 	}
 
 }
